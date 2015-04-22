@@ -10,9 +10,6 @@ Author URI: http://kyleblog.net
 License: GPL2
 */
 
-if ( class_exists( 'wptv' ) ) {
-	return;
-}
 /**
  * Class wptv
  */
