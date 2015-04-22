@@ -1,0 +1,9 @@
+.wptv li {
+    display: inline-block;
+    list-style: none;
+    width: 28%;
+    vertical-align: top;
+}
+.wptv img {
+    width: 100%;
+}

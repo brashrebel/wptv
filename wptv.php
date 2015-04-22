@@ -31,19 +31,21 @@ class wptv {
 	public function __construct() {
 		add_action( 'admin_notices', array( $this, 'request' ) );
 		add_action( 'current_screen', array( $this, 'add_help_tab' ) );
+		add_action( 'admin_init', array( $this, 'style' ) );
+	}
+
+	public function style() {
+		wp_register_style( 'wptv', plugins_url( 'assets/style.css', __FILE__ ), array(), '0.1');
 	}
 
 	/**
 	* request
 	*/
 	public function request( $tag ) {
-		$url = 'http://wordpress.tv/?wptvapi=videos.json&posts_per_page=4&tag=';
+		$url = 'http://wordpress.tv/?wptvapi=videos.json&posts_per_page=3&tag=';
 		$request = wp_remote_get( $url . $tag );
 		$request = wp_remote_retrieve_body( $request );
 		$request = json_decode( $request );
-
-//		var_dump( $request );
-//		var_dump(get_current_screen());
 		return $request;
 	}
 
@@ -51,6 +53,7 @@ class wptv {
 		$screen = get_current_screen();
 		foreach ( $this->places as $place ) {
 			if ( $place['screen'] == $screen->base ) {
+				wp_enqueue_style( 'wptv' );
 				$screen->add_help_tab( array(
 						'id' => 'videos',
 						'title' => 'Videos',
@@ -68,7 +71,7 @@ class wptv {
 			if ( $place['screen'] == $screen->base ) {
 				$videos = $this->request( $place['tag'] );
 				if ( $videos ) {
-					echo '<ul>';
+					echo '<ul class="wptv">';
 					foreach ( $videos->videos as $video ) {
 						echo '<li>';
 						echo '<a href="' . $video->permalink . '">';
