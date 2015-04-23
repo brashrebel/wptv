@@ -94,12 +94,13 @@ class wptv {
 		$screen = get_current_screen();
 		foreach ( $this->places as $place ) {
 			if ( $place['screen'] == $screen->base ) {
-				$videos = $this->request( $place['tag'] );
+				$tag = $place['tag'];
+				$videos = $this->request( $tag );
 				if ( ! is_wp_error( $videos ) ) {
 					echo '<ul class="wptv">';
 					foreach ( $videos->videos as $video ) {
 						echo '<li>';
-						echo '<a href="' . $video->permalink . '">';
+						echo '<a href="' . $video->permalink . '" target="_BLANK">';
 						echo '<img src="' . $video->thumbnail . '" />';
 						echo '<span>' . $video->title . '</span>';
 						echo '</a>';
@@ -109,6 +110,7 @@ class wptv {
 				}
 			}
 		}
+		echo '<a class="wptv-link" href="http://wordpress.tv/tag/' . $tag . '/">See more videos</a>';
 	}
 
 }

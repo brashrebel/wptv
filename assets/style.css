@@ -7,3 +7,6 @@
 .wptv img {
     width: 100%;
 }
+.wptv-link {
+    float: right;
+}
