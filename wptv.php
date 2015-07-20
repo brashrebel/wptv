@@ -57,15 +57,17 @@ class wptv {
 	/**
 	 * @param $tag
 	 *
-	 * @return array|mixed|string|WP_Error
+	 * @return array|mixed|string|null
 	 */
 	public function request( $tag ) {
 		$url     = 'http://wordpress.tv/?wptvapi=videos.json&posts_per_page=3&tag=';
 		$request = wp_remote_get( $url . $tag );
 		$request = wp_remote_retrieve_body( $request );
-		$request = json_decode( $request );
-
-		return $request;
+		if( is_wp_error( $request ) ) {
+			error_log( $request->get_error_message() );
+			$request = null;
+		}
+		return json_decode( $request );
 	}
 
 	/**
@@ -96,7 +98,7 @@ class wptv {
 			if ( $place['screen'] == $screen->base ) {
 				$tag = $place['tag'];
 				$videos = $this->request( $tag );
-				if ( ! is_wp_error( $videos ) ) {
+				if ( !( $videos === null ) ) {
 					echo '<ul class="wptv">';
 					foreach ( $videos->videos as $video ) {
 						echo '<li>';
